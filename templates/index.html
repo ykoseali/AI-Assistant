@@ -1,0 +1,91 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>AI Response Comparison</title>
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .response-container {
+        margin-top: 30px;
+        padding: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        background-color: #f1f1f1;
+        max-height: 500px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      .response-title {
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      .response-text {
+        font-size: 1.1em;
+        line-height: 1.6;
+        text-align: left;
+      }
+      .highlight {
+        background-color: #d4edda;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container text-center">
+      <h1>Multi-AI Response Tool</h1>
+      <form method="post">
+        <div class="form-group">
+          <input type="text" name="question" class="form-control" placeholder="Ask a question" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Get Answers</button>
+      </form>
+      {% if question %}
+      <div class="response-container mt-4">
+        <h3>Question: {{ question }}</h3>
+        <div class="response-title">OpenAI Response:</div>
+        <p class="response-text">{{ openai_result|safe }}</p>
+        <div class="response-title">PerplexityAI Response:</div>
+        <p class="response-text">{{ perplexity_result|safe }}</p>
+        <div class="response-title">Claude Response:</div>
+        <p class="response-text">{{ claude_result|safe }}</p>
+        <div class="response-title">OpenAI Evaluation:</div>
+        <p class="response-text">{{ evaluation_result|safe }}</p>
+        
+        {% if 'OpenAI' in evaluation_result %}
+        <div class="response-title">Chosen Response:</div>
+        <p class="response-text highlight">OpenAI Response: {{ openai_result|safe }}</p>
+        {% elif 'PerplexityAI' in evaluation_result %}
+        <div class="response-title">Chosen Response:</div>
+        <p class="response-text highlight">PerplexityAI Response: {{ perplexity_result|safe }}</p>
+        {% elif 'Claude' in evaluation_result %}
+        <div class="response-title">Chosen Response:</div>
+        <p class="response-text highlight">Claude Response: {{ claude_result|safe }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
